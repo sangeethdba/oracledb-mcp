@@ -41,6 +41,40 @@ python3 -m pip install -r requirements.txt
 - SQL syntax compatibility: server now includes automatic fallback for `FETCH FIRST ... ROWS ONLY` to legacy `ROWNUM` pattern when running against older versions.
 - Feature-dependent tools (AWR/ASH/SQL Monitor/SPM/SQL Patch/SQL Profile) require corresponding Oracle options, privileges, and pack licensing.
 
+## Observability (OpenTelemetry)
+
+MCP tool spans can be exported with OpenTelemetry.
+
+Enable tracing:
+
+```bash
+export TRACING=enabled
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318/v1/traces"
+# optional:
+export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer <token>"
+```
+
+Console exporter (local debug):
+
+```bash
+export TRACING=enabled
+export OTEL_TRACES_EXPORTER=console
+```
+
+### MCP context propagation
+
+The server extracts trace context from MCP request `_meta` (when provided), including:
+
+- `traceparent`
+- `tracestate`
+- `baggage`
+
+This supports parent-child trace continuity between MCP clients and this server.
+
+Reference:
+- OpenTelemetry MCP semantic conventions (context propagation): `docs/gen-ai/mcp.md#context-propagation` in `open-telemetry/semantic-conventions`
+
 ## Run Server
 
 ### STDIO (best for most MCP clients)
@@ -74,6 +108,18 @@ python3 oracledb_mcp.py --transport streamable-http --port 8020
   }
 }
 ```
+
+## Troubleshooting
+
+- Symptom: MCP client shows `Running` then immediately `Stopped`.
+- Fix checklist:
+  - Ensure server entry uses stdio and points to `<repo_root>/oracledb_mcp.py`.
+  - Ensure Python environment can import all requirements (`pip install -r requirements.txt`).
+  - Confirm Oracle env vars are present: `ORACLE_USER`, `ORACLE_PASSWORD`, `ORACLE_DSN`.
+  - Run directly to validate process startup:
+    - `python3 <repo_root>/oracledb_mcp.py --transport stdio`
+  - Run registration test:
+    - `python3 -m pytest -q tests/test_oracledb_mcp.py`
 
 ## Cursor MCP (example)
 

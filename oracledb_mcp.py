@@ -42,7 +42,7 @@ parser = argparse.ArgumentParser(description="OracleDB MCP Server")
 parser.add_argument(
     "--transport",
     choices=["stdio", "sse", "streamable-http"],
-    default="streamable-http",
+    default="stdio",
     help="Transport protocol",
 )
 parser.add_argument("--port", type=int, default=8020, help="Port for SSE/HTTP transports")
@@ -5520,12 +5520,19 @@ async def oracle_rac_gc_hotspots(
             )
     finally:
         conn.close()
+
+
+if __name__ == "__main__":
     try:
-        logger.info("starting oracledb mcp server")
         if args.transport == "stdio":
-            mcp.run(transport=args.transport)
+            mcp.run(transport=args.transport, show_banner=False, log_level="ERROR")
         else:
-            mcp.run(transport=args.transport, port=args.port)
+            mcp.run(
+                transport=args.transport,
+                port=args.port,
+                show_banner=False,
+                log_level="ERROR",
+            )
     except Exception as e:
         logger.error(f"error starting oracledb mcp server: {e}")
         print(f"Error starting OracleDB MCP server: {e}", file=sys.stderr)
