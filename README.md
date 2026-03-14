@@ -30,7 +30,7 @@ Full per-tool catalog (signature, purpose, example call):
 ## Setup
 
 ```bash
-cd /Users/SXT6582/oracledb-mcp
+cd <repo_root>
 python3 -m pip install -r requirements.txt
 ```
 
@@ -64,7 +64,7 @@ python3 oracledb_mcp.py --transport streamable-http --port 8020
   "mcpServers": {
     "oracledb-mcp": {
       "command": "python3",
-      "args": ["/Users/SXT6582/oracledb-mcp/oracledb_mcp.py", "--transport", "stdio"],
+      "args": ["<repo_root>/oracledb_mcp.py", "--transport", "stdio"],
       "env": {
         "ORACLE_USER": "<db_username>",
         "ORACLE_PASSWORD": "<db_password>",
@@ -82,7 +82,7 @@ python3 oracledb_mcp.py --transport streamable-http --port 8020
   "mcpServers": {
     "oracledb-mcp": {
       "command": "python3",
-      "args": ["/Users/SXT6582/oracledb-mcp/oracledb_mcp.py", "--transport", "stdio"],
+      "args": ["<repo_root>/oracledb_mcp.py", "--transport", "stdio"],
       "env": {
         "ORACLE_USER": "<db_username>",
         "ORACLE_PASSWORD": "<db_password>",
@@ -100,7 +100,7 @@ python3 oracledb_mcp.py --transport streamable-http --port 8020
   "mcpServers": {
     "oracledb-mcp": {
       "command": "python3",
-      "args": ["/Users/SXT6582/oracledb-mcp/oracledb_mcp.py", "--transport", "stdio"],
+      "args": ["<repo_root>/oracledb_mcp.py", "--transport", "stdio"],
       "env": {
         "ORACLE_USER": "<db_username>",
         "ORACLE_PASSWORD": "<db_password>",
@@ -155,13 +155,13 @@ python3 oracledb_mcp.py --transport streamable-http --port 8020
 
 Registration test:
 ```bash
-cd /Users/SXT6582/oracledb-mcp
+cd <repo_root>
 python3 -m pytest -q tests/test_oracledb_mcp.py
 ```
 
 Live Oracle integration test (executes all tools):
 ```bash
-cd /Users/SXT6582/oracledb-mcp
+cd <repo_root>
 ORACLE_USER='<db_username>' ORACLE_PASSWORD='<db_password>' ORACLE_DSN='<host:port/service>' python3 tests/integration_oracledb_mcp.py
 ```
 

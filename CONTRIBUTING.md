@@ -13,7 +13,7 @@ This repository is MCP-server focused.
 ## Local Setup
 
 ```bash
-cd /Users/SXT6582/oracledb-mcp
+cd <repo_root>
 python3 -m pip install -r requirements.txt
 ```
 
