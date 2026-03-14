@@ -149,7 +149,6 @@ python3 oracledb_mcp.py --transport streamable-http --port 8020
 `examples/` now contains LLM-formatted prompt/response documentation (not raw JSON):
 
 - `examples/TOOL_EXAMPLES.md`
-- `examples/NEW_DBRE_TOOLS_EXAMPLES.md`
 
 ## Testing
 
