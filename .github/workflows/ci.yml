@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - docs/examples-real-responses
+
+jobs:
+  test-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest
+
+      - name: Compile check
+        run: |
+          python -m py_compile oracledb_mcp.py shared_utils.py scripts/generate_tool_catalog.py tests/test_oracledb_mcp.py tests/integration_oracledb_mcp.py
+
+      - name: Registration tests
+        run: |
+          python -m pytest -q tests/test_oracledb_mcp.py
+
+      - name: Regenerate tool catalog
+        run: |
+          python scripts/generate_tool_catalog.py
+
+      - name: Verify catalog is up to date
+        run: |
+          git diff --exit-code docs/TOOL_CATALOG.md
